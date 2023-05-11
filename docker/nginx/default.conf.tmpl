@@ -1,0 +1,37 @@
+upstream php-upstream {
+    server ${NGINX_PHP_UPSTREAM}:9000;
+}
+
+server {
+    server_tokens off;
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /app/public;
+    location ${NGINX_URI_PREFIX}/ {
+        #rewrite ^${NGINX_URI_PREFIX}(.*)$ $1 last;
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+    location / {
+        try_files $uri /index.php?$args;
+    }
+    
+    location ~ \.php$ {
+        fastcgi_pass php-upstream;
+        fastcgi_index index.php;
+        fastcgi_split_path_info ^(index.php)(/.*)$;
+        include fastcgi_params;
+        # Use the modified URI, not the original request URI
+        
+        #Altering the REQUEST_URI breaks Laravel Pagination urls
+        #fastcgi_param REQUEST_URI $uri$is_args$args;
+        fastcgi_param REQUEST_URI $request_uri;
+
+        # Append the script path
+        fastcgi_param SCRIPT_FILENAME /app/public$fastcgi_script_name;
+        fastcgi_param HTTPS off;
+    }
+
+    error_log /dev/stderr;
+    access_log /dev/stdout;
+}
