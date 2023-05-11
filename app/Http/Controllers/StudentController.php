@@ -50,7 +50,9 @@ class StudentController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $student = Student::where('id', $id)->first();
+        $teachers = Teacher::all();
+        return view('student.edit', compact('student', 'teachers'));
     }
 
     /**
@@ -58,7 +60,13 @@ class StudentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $student = Student::where('id', $id)->first();
+        $student->name = $request->name;
+        $student->age = $request->age;
+        $student->gender = $request->gender;
+        $student->reporting_to = $request->reporting_to;
+        $student->save();
+        return redirect('/student');
     }
 
     /**
@@ -66,6 +74,7 @@ class StudentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Student::where('id', $id)->delete();
+        return redirect('/student');
     }
 }

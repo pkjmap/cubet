@@ -50,7 +50,9 @@ class MarkController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $mark = Mark::where('id', $id)->first();
+        $students = Student::all();
+        return view('mark.edit', compact('mark', 'students'));
     }
 
     /**
@@ -58,7 +60,14 @@ class MarkController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $student = Mark::where('id', $id)->first();
+        $student->maths = $request->maths;
+        $student->student_id = $request->student_id;
+        $student->science = $request->science;
+        $student->history = $request->history;
+        $student->term = $request->term;
+        $student->save();
+        return redirect('/mark');
     }
 
     /**
@@ -66,6 +75,7 @@ class MarkController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Mark::where('id', $id)->delete();
+        return redirect('/mark');
     }
 }
