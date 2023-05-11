@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -11,7 +13,8 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+        $students = Student::all();
+        return view('student.index', compact('students'));
     }
 
     /**
@@ -19,7 +22,8 @@ class StudentController extends Controller
      */
     public function create()
     {
-        //
+        $teachers = Teacher::all();
+        return view('student.add', compact('teachers'));
     }
 
     /**
@@ -27,7 +31,10 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $teacher = new Student();
+        $teacher->fill($request->except(['_token']));
+        $teacher->save();
+        return redirect('/student');
     }
 
     /**

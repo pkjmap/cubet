@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Mark;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class MarkController extends Controller
@@ -11,7 +13,8 @@ class MarkController extends Controller
      */
     public function index()
     {
-        //
+        $marks = Mark::all();
+        return view('mark.index', compact('marks'));
     }
 
     /**
@@ -19,7 +22,8 @@ class MarkController extends Controller
      */
     public function create()
     {
-        //
+        $students = Student::all();
+        return view('mark.add', compact('students'));
     }
 
     /**
@@ -27,7 +31,10 @@ class MarkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $mark = new Mark();
+        $mark->fill($request->except(['_token']));
+        $mark->save();
+        return redirect('/mark');
     }
 
     /**

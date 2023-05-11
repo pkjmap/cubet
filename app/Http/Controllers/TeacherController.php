@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 
 class TeacherController extends Controller
@@ -11,7 +12,8 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        //
+        $teachers = Teacher::all();
+        return view('teacher.index', compact('teachers'));
     }
 
     /**
@@ -19,7 +21,7 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        //
+        return view('teacher.add');
     }
 
     /**
@@ -27,7 +29,10 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $teacher = new Teacher();
+        $teacher->fill($request->except(['_token']));
+        $teacher->save();
+        return redirect('/teacher');
     }
 
     /**
