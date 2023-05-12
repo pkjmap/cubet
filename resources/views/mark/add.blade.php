@@ -18,6 +18,9 @@
 
 <body>
     <div class="container">
+        @foreach ($errors->all() as $error)
+        {{ $error }}<br />
+        @endforeach
         <form method="POST" action="/mark">
             @csrf
             <div class="form-group">
@@ -33,7 +36,7 @@
                 <input type="number" name="maths" class="form-control" id="exampleInputEmail1" placeholder="Maths">
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail1">science</label>
+                <label for="exampleInputEmail1">Science</label>
                 <input type="number" name="science" class="form-control" id="exampleInputEmail1" placeholder="science">
             </div>
             <div class="form-group">
@@ -47,7 +50,7 @@
                     <option value="Two">Two</option>
                 </select>
             </div>
-            
+
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>

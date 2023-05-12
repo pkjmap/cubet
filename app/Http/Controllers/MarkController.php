@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Mark;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 class MarkController extends Controller
 {
@@ -31,6 +33,19 @@ class MarkController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'student_id' => 'integer:required',
+                'maths' => 'integer:required',
+                'science' => 'integer:required',
+                'history' => 'integer:required',
+                'term' => 'string:required',
+            ]
+        );
+        if ($validator->fails()) {
+            return Redirect::to('/mark/create')->withErrors($validator);
+        }
         $mark = new Mark();
         $mark->fill($request->except(['_token']));
         $mark->save();
